@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      h1 {
+        text-align: center;
+      }
+      .div-coba {
+        display: flex;
+        justify-content: center;
+      }
+      .div-coba form {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .div-coba button {
+        cursor: pointer;
+      }
+      .div-tampil {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+      .div-tampil button {
+        height: 20px;
+        border-color: white;
+        cursor: pointer;
+      }
+      .div-tampil1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Latihan Node Js Lanjutan</h1>
+    <div class="div-coba">
+      <form name="formcoba">
+        <textarea
+          name="coba"
+          cols="30"
+          rows="10"
+          placeholder="Tulis sesuatu ....."
+          required
+          autofocus
+        ></textarea>
+        <button>Simpan</button>
+      </form>
+    </div>
+    <div class="div-tampil">
+      <p>Tampilkan data</p>
+      <button class="btn-tampil">Click</button>
+    </div>
+    <div class="div-tampil1"></div>
+    <script>
+      document.formcoba.onsubmit = (event) => {
+        event.preventDefault();
+        const coba = document.formcoba.coba.value;
+        fetch("/api/restapi/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coba,
+          }),
+        });
+        alert("Data berhasil disimpan");
+        location.reload();
+      };
+      document.querySelector(".btn-tampil").onclick = async () => {
+        const res = await fetch("/api/restapi/get", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.text();
+        const kumpulanData = [];
+        let angka = 0;
+        for (let x = 0; x < data.length; x++) {
+          let tamp = "";
+          if (data.split("\n")[angka]) {
+            tamp = data.split("\n")[angka];
+            kumpulanData.push(tamp);
+            const divTampil1 = document.querySelector(".div-tampil1");
+            const createDiv = document.createElement("div");
+            const p = document.createElement("p");
+            p.textContent = `${angka+1}. ${kumpulanData[angka]}`;
+            createDiv.appendChild(p);
+            divTampil1.appendChild(createDiv);
+            angka++;
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

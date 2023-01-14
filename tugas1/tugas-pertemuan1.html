@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .div-form {
+        display: flex;
+        justify-content: center;
+      }
+      h1 {
+        text-align: center;
+      }
+      .div-form form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .div-form button {
+        background-color: rgb(0, 89, 255);
+        border-color: rgb(0, 89, 255);
+        color: white;
+        cursor: pointer;
+      }
+      .tampil {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+      .tampil #btn-tampil {
+        cursor: pointer;
+        height: 20px;
+      }
+      .tampil #btn-tampil:hover {
+        background-color: rgb(0, 89, 255);
+        border-color: rgb(0, 89, 255);
+        color: white;
+      }
+      .tampil1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tugas Pertemuan 1</h1>
+    <div class="div-form">
+      <form name="formtulis">
+        <textarea
+          name="tulis"
+          cols="30"
+          rows="10"
+          placeholder="Tulis sesuatu ....."
+          required
+          autofocus
+        ></textarea>
+        <button id="btn-simpan">Simpan</button>
+      </form>
+    </div>
+    <div class="tampil">
+      <p>Tampilkan data</p>
+      <button id="btn-tampil">Tampilkan</button>
+    </div>
+    <div class="tampil1"></div>
+    <script>
+      document.formtulis.onclick = async (event) => {
+        event.preventDefault();
+        const tulis = document.formtulis.tulis.value;
+        await fetch("/api/restapitp1/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tulis,
+          }),
+        });
+        location.reload();
+      };
+
+      const btnTampil = (document.querySelector("#btn-tampil").onclick = (
+        e
+      ) => {
+        e.preventDefault();
+        fetch("/api/restapitp1/get", {
+          method: "GET",
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            const divTampil = document.querySelector(".tampil1");
+            const dataa = document.createElement("p");
+            dataa.textContent = data;
+            divTampil.appendChild(dataa);
+          });
+      });
+    </script>
+  </body>
+</html>
